@@ -15,6 +15,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
+      - name: setup buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: build image
         uses: docker/build-push-action@v5
         with:
@@ -22,6 +25,8 @@ jobs:
           push: false
           load: true
           tags: lab-github-actions:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: security scan
         uses: aquasecurity/trivy-action@master
@@ -50,7 +55,7 @@ jobs:
   build:
     name: Build & Push
     needs: [security, quality]
-    uses: .github/workflows/reusable-build.yml
+    uses: ./.github/workflows/reusable-build.yml
     with:
       image-name: lab-github-actions
     secrets:

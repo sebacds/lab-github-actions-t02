@@ -89,6 +89,7 @@ jobs:
 
   verify-report:
     name: Verificar reporte
+    runs-on: ubuntu-latest
     needs: build
     steps:
       - name: descargar reporte

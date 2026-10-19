@@ -76,14 +76,26 @@ jobs:
       
       - name: generar reporte
         run: |
-          FECHA=$(date -u +%Y-%m-%d)
           mkdir -p reports
-          echo "Commit: ${{ github.sha }}" > reports/build-report-$FECHA.txt
-          echo "Branch: ${{ github.ref_name }}" >> reports/build-report-$FECHA.txt
-          echo "Image-tag: ${{ steps.tag.outputs.SHORT_SHA }}" >> reports/build-report-$FECHA.txt
+          echo "Commit: ${{ github.sha }}" > reports/build-report.txt
+          echo "Branch: ${{ github.ref_name }}" >> reports/build-report.txt
+          echo "Image-tag: ${{ steps.tag.outputs.SHORT_SHA }}" >> reports/build-report.txt
 
       - name: subir reporte
         uses: actions/upload-artifact@v4
         with:
           name: build-report
-          path: reports/build-report-*.txt
+          path: reports/build-report.txt
+
+  verify-report:
+    name: Verificar reporte
+    needs: build
+    steps:
+      - name: descargar reporte
+        uses: actions/download-artifact@v4
+        with:
+          name: build-report
+          path: reports/
+
+      - name: imprimir reporte
+        run: cat reports/build-report.txt

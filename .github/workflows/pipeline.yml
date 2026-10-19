@@ -100,3 +100,13 @@ jobs:
 
       - name: imprimir reporte
         run: cat reports/build-report.txt
+
+  deploy-prod:
+    name: Despliegue
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: prod
+    steps:
+      - name: Simular despliegue
+        run: echo "Despliegue exitoso"

@@ -82,4 +82,4 @@ jobs:
         run: echo "SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)" >> "$GITHUB_OUTPUT"
 
       - name: Mostrar tag corto
-        run: echo "${{ steps.tag.outputs.SHORT_SHA"
+        run: echo "${{ steps.tag.outputs.SHORT_SHA }}"

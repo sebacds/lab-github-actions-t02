@@ -15,6 +15,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
+      - name: setup buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: build image
         uses: docker/build-push-action@v5
         with:
@@ -22,6 +25,8 @@ jobs:
           push: false
           load: true
           tags: lab-github-actions:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: security scan
         uses: aquasecurity/trivy-action@master
@@ -65,6 +70,9 @@ jobs:
         id: tag
         run: echo "SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)" >> "$GITHUB_OUTPUT"
 
+      - name: setup buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: build & push
         uses: docker/build-push-action@v5
         with:
@@ -73,6 +81,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/lab-github-actions:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/lab-github-actions:${{ steps.tag.outputs.SHORT_SHA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       
       - name: generar reporte
         run: |

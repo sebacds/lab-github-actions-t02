@@ -73,6 +73,13 @@ jobs:
         run: |
           echo "Commit: ${{ github.sha }}"
           echo "Rama: ${{ github.branch }}"
-          echo "Evento: ${{ github.event_name }}"
+          echo "Evento: ${{ github.ref_name }}"
           echo "Usuario: ${{ github.actor }}"
           echo "Sistema operativo: ${{ runner.os }}"
+
+      - name: Generar tag corto
+        id: tag
+        run: echo "SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)" >> "$GITHUB_OUTPUT"
+
+      - name: Mostrar tag corto
+        run: echo "${{ steps.tag.outputs.SHORT_SHA"
